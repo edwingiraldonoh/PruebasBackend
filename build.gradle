@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '3.9.8'
+}
+
+group = 'com.proyecto'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Serenity BDD con JUnit 4
+    testImplementation 'net.serenity-bdd:serenity-core:3.9.8'
+    testImplementation 'net.serenity-bdd:serenity-cucumber:3.9.8'
+    testImplementation 'net.serenity-bdd:serenity-screenplay:3.9.8'
+    testImplementation 'net.serenity-bdd:serenity-screenplay-rest:3.9.8'
+    testImplementation 'net.serenity-bdd:serenity-ensure:3.9.8'
+    testImplementation 'net.serenity-bdd:serenity-junit:3.9.8'
+
+    // Cucumber con JUnit 4
+    testImplementation 'io.cucumber:cucumber-java:7.11.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.11.0'
+
+    // JUnit 4
+    testImplementation 'junit:junit:4.13.2'
+
+    // Assertions y Logging
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+
+    // REST API testing
+    implementation 'net.serenity-bdd:serenity-rest-assured:3.9.8'
+    implementation 'io.rest-assured:rest-assured:5.3.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+}
+
+test {
+    useJUnit() // Para JUnit 4
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+    include '**/TestRunnerCreacionUsuarioApi.class' // FORZAR ejecución del runner
+}
+
+serenity {
+    testRoot = "com.proyecto.runners"
+    requirementsBaseDir = "src/test/resources/features"
+}
+
+gradle.startParameter.continueOnFailure = true
+test.finalizedBy(aggregate)
